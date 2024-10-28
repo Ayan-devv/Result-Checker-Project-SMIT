@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Test Results</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>SMIT Quiz Results</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h2>Enter Roll Number to See All Test Results</h2>
+        
+        <input type="text" id="rollNumberInput" placeholder="Enter Roll Number">
+        <button onclick="checkResults()">Check Results</button>
+        
+        <div id="resultContainer" class="result-container">
+            <p id="resultDisplay" class="result"></p>
+        </div>
+
+        <footer>
+            <p class="watermark">Designed and Developed By Muhammad Ayan</p>
+        </footer>
+    </main>
+
+    <script>
+        // Sample student data with results for each test
+        const studentData = [
+            { rollNumber: "271491", name: "Syed Danish Ali", results: { html: 90, css: 73, js1: 89, js2: 86 } },
+            { rollNumber: "256761", name: "Nirmal", results: { html: 80, css: 68, js1: 83, js2: 69 } },
+            { rollNumber: "261124", name: "Muhammad Uzair", results: { html: 83, css: 70, js1: 94, js2: 86 } },
+            { rollNumber: "257765", name: "Muhammad Azam", results: { html: 100, css: 75, js1: 97, js2: 74 } },
+            { rollNumber: "321624", name: "Muhammad Hanzala", results: { html: null, css: null, js1: 86, js2: 51 } },
+            { rollNumber: "321491", name: "Hafiz Uzair Ahmed", results: { html: null, css: null, js1: 66, js2: 66 } },
+            { rollNumber: "325827", name: "Saim Ahmed", results: { html: null, css: null, js1: 71, js2: 37 } },
+            { rollNumber: "321492", name: "Ahmed Abdul Qayyum", results: { html: null, css: null, js1: 77, js2: 63 } },
+            { rollNumber: "252863", name: "Mehmood", results: { html: 93, css: 78, js1: 89, js2: 80 } },
+            { rollNumber: "252903", name: "Abdullah", results: { html: 97, css: 83, js1: 94, js2: 71 } },
+            { rollNumber: "267759", name: "Usama", results: { html: 87, css: 63, js1: 94, js2: 83 } },
+            { rollNumber: "253959", name: "Muhammad Ayan", results: { html: 83, css: 75, js1: 89, js2: 63 } },
+            { rollNumber: "278922", name: "Muhammed Abid", results: { html: 80, css: 45, js1: 71, js2: 43 } },
+            { rollNumber: "256393", name: "Muhammad Areeb Khan", results: { html: 87, css: 63, js1: 94, js2: 60 } },
+            { rollNumber: "258462", name: "Mohammad Farasat", results: { html: 83, css: 70, js1: 86, js2: 89 } },
+            { rollNumber: "259665", name: "Abdur Rahman", results: { html: 97, css: 80, js1: 74, js2: 60 } },
+            { rollNumber: "321476", name: "Muhammad Ahmed Raza", results: { html: null, css: null, js1: 86, js2: 63 } },
+            { rollNumber: "256841", name: "Abdul Haseeb", results: { html: 83, css: 88, js1: 77, js2: 74 } },
+            { rollNumber: "270292", name: "Muhammad Usama", results: { html: 87, css: 78, js1: 86, js2: 71 } },
+            { rollNumber: "264353", name: "Syed Hassnain Ali", results: { html: 83, css: 60, js1: 91, js2: 74 } },
+            { rollNumber: "278504", name: "Afaan", results: { html: 70, css: 53, js1: 63, js2: 49 } },
+            { rollNumber: "258256", name: "Muhammad Hamza", results: { html: 80, css: 85, js1: 74, js2: 63 } },
+            { rollNumber: "272488", name: "Irtaza Ahmed", results: { html: 90, css: 80, js1: 83, js2: 71 } },
+            { rollNumber: "286330", name: "Muhammad Anus", results: { html: 77, css: 53, js1: 86, js2: 77 } },
+            { rollNumber: "290098", name: "Muhammad Mehdi", results: { html: null, css: 58, js1: 91, js2: 74 } },
+            { rollNumber: "321314", name: "Noman Ahmed", results: { html: null, css: null, js1: 63, js2: 34 } },
+            { rollNumber: "321009", name: "Muhammad Ibrahim", results: { html: null, css: null, js1: 77, js2: 63 } },
+            { rollNumber: "257753", name: "Ayanali", results: { html: 63, css: 53, js1: 40, js2: 26 } },
+            { rollNumber: "272536", name: "Shahzaib", results: { html: null, css: 50, js1: 74, js2: 69 } },
+            { rollNumber: "254569", name: "Saeed Ali", results: { html: 70, css: 78, js1: 80, js2: 80 } },
+            { rollNumber: "262195", name: "Muzammil Ismail", results: { html: 83, css: 78, js1: null, js2: 69 } },
+            { rollNumber: "264083", name: "Kabeer", results: { html: 77, css: 70, js1: 86, js2: 71 } },
+            { rollNumber: "278937", name: "Abdullah", results: { html: 83, css: 68, js1: 69, js2: 63 } },
+            { rollNumber: "264548", name: "Muhammad Hasnain", results: { html: 80, css: 78, js1: 83, js2: 74 } },
+            { rollNumber: "285739", name: "Tahseen Abdul Ghaffar", results: { html: 83, css: 65, js1: 74, js2: 83 } },
+            { rollNumber: "271422", name: "Muhammad Ahmed Raza", results: { html: 83, css: 80, js1: 91, js2: 77 } },
+            { rollNumber: "262180", name: "Ali", results: { html: null, css: 48, js1: 69, js2: 34 } },
+            { rollNumber: "283678", name: "Zaid Irfan", results: { html: 73, css: null, js1: 91, js2: 86 } },
+            { rollNumber: "257471", name: "Bilal Khan", results: { html: 83, css: 70, js1: 94, js2: 77 } },
+            { rollNumber: "262550", name: "Hunain", results: { html: 63, css: 78, js1: 74, js2: 74 } },
+            { rollNumber: "261991", name: "Zain Ul Abedin", results: { html: 90, css: 80, js1: 91, js2: 77 } },
+            { rollNumber: "301904", name: "Muhammad Umer", results: { html: null, css: 55, js1: 80, js2: 57 } },
+            { rollNumber: "321006", name: "Shayan Ahmed", results: { html: null, css: null, js1: 80, js2: 57 } },
+            { rollNumber: "257433", name: "ABdullah", results: { html: 77, css: 78, js1: 89, js2: 74 } },
+            { rollNumber: "281806", name: "Syed Omer Ali", results: { html: 80, css: 68, js1: 80, js2: 63 } },
+            { rollNumber: "255944", name: "Muhammad Farooq", results: { html: 87, css: 70, js1: 86, js2: 80 } },
+            { rollNumber: "259899", name: "Maaz Ahmed", results: { html: null, css: 43, js1: 97, js2: 83 } },
+            { rollNumber: "286857", name: "Hamza", results: { html: null, css: 73, js1: 80, js2: 57 } },
+            { rollNumber: "257347", name: "Daniyal", results: { html: null, css: 80, js1: 94, js2: 74 } },
+            { rollNumber: "267758", name: "Manoor haider", results: { html: 77, css: 50, js1: 83, js2: 83 } },
+            { rollNumber: "262456", name: "Hanzala Bawany", results: { html: 83, css: 70, js1: 86, js2: 66 } },
+            { rollNumber: "262915", name: "Mohd Essa", results: { html: 83, css: 83, js1: 89, js2: 80 } },
+            { rollNumber: "268432", name: "Muhammad Maaz", results: { html: 83, css: 68, js1: 89, js2: 60 } },
+            { rollNumber: "270030", name: "Zakir", results: { html: 80, css: 85, js1: 74, js2: 60 } },
+            { rollNumber: "274349", name: "M.Adnan", results: { html: 80, css: 68, js1: 86, js2: 60 } },
+            { rollNumber: "267305", name: "M.Adeel Umer", results: { html: 73, css: 70, js1: 100, js2: 77 } },
+            { rollNumber: "268326", name: "Muhammad Waris Khan", results: { html: 83, css: 40, js1: 83, js2: 40 } },
+            { rollNumber: "260807", name: "Syed Ghazali", results: { html: 80, css: 65, js1: 89, js2: 63 } },
+            { rollNumber: "262535", name: "Hamza Faisal", results: { html: 80, css: 50, js1: 94, js2: 66 } }
+        ];
+
+        function checkResults() {
+            const rollNumber = document.getElementById("rollNumberInput").value.trim();
+            const resultContainer = document.getElementById("resultContainer");
+            const resultDisplay = document.getElementById("resultDisplay");
+
+            // Hide previous result
+            resultContainer.style.display = "none";
+            resultDisplay.classList.remove("not-found");
+
+            // Find student by roll number
+            const student = studentData.find(s => s.rollNumber === rollNumber);
+
+            if (student) {
+                resultDisplay.innerHTML = `
+                    <div class="student-info">
+                        <p><strong>Roll Number:</strong> ${student.rollNumber}</p>
+                        <p><strong>Name:</strong> ${student.name}</p>
+                    </div>
+                    <div class="quiz-results">
+                        <div class="quiz-card">
+                            <h3>HTML Quiz</h3>
+                            <p><strong>Score:</strong> ${student.results.html !== null ? student.results.html : "Not Available"}</p>
+                        </div>
+                        <div class="quiz-card">
+                            <h3>CSS Quiz</h3>
+                            <p><strong>Score:</strong> ${student.results.css !== null ? student.results.css : "Not Available"}</p>
+                        </div>
+                        <div class="quiz-card">
+                            <h3>JavaScript 1 Quiz</h3>
+                            <p><strong>Score:</strong> ${student.results.js1 !== null ? student.results.js1 : "Not Available"}</p>
+                        </div>
+                        <div class="quiz-card">
+                            <h3>JavaScript 2 Quiz</h3>
+                            <p><strong>Score:</strong> ${student.results.js2 !== null ? student.results.js2 : "Not Available"}</p>
+                        </div>
+                    </div>
+                `;
+                resultContainer.style.display = "block";
+            } else {
+                resultDisplay.innerHTML = "Result not found. Please check your roll number.";
+                resultDisplay.classList.add("not-found");
+                resultContainer.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
